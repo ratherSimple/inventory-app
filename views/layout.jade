@@ -1,0 +1,14 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    h1 Navigation:
+    block sidebar
+      ul
+        li
+          a(href="/") Go to home page
+        li
+          a(href="/inventory/categories") See all categories
+    block content

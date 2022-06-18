@@ -1,0 +1,11 @@
+extends layout 
+
+block content 
+  h2 The details of #{item.name} are:
+  p Description: #{item.description}
+  p Category: #{item.category.name}
+  p Quantity: #{item.quantity}
+  p Price: #{item.price}
+  br
+  p
+    a(href=item.url+"/update") Update this item
