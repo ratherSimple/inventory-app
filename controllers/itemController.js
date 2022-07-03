@@ -12,11 +12,20 @@ exports.item_create_post = function(req, res) {
 }
 
 exports.item_delete_get = function(req, res) {
-  res.send("heres the form to delete items");
+  Item
+  .findById(req.params.id)
+  .populate("category")
+  .exec((err, item) => {
+    res.render("item_delete", {item: item});
+  }) 
 }
 
 exports.item_delete_post = function(req, res) {
-  res.send("create items form gets processed here");
+  Item.findByIdAndRemove(req.body.id, (err) => {
+    if (err)
+      return next(err);
+    res.redirect(`/inventory/categories`)
+  })
 }
 
 exports.item_update_get = function(req, res) {
@@ -36,14 +45,29 @@ exports.item_update_get = function(req, res) {
   }, function(err, results) {
     if (err)
       return next(err);
-    res.render('item_update', {item: results.item, categories: results.categories});
+    res.render('item_form', {item: results.item, categories: results.categories});
     
   });
   
 }
 
-exports.item_update_post = function(req, res) {
-  res.send("update items form gets processed here");
+exports.item_update_post = async function(req, res, next) {
+  // res.send(`update items form gets processed here ${req.body.id}`);
+  let item = new Item({
+    name: req.body.name,
+    description: req.body.description,
+    category: await Category.findOne({name: req.body.category}).exec(),
+    price: req.body.price,
+    quantity: req.body.quantity,
+    _id: req.params.id
+  })
+
+  Item.findByIdAndUpdate(req.params.id, item, {}, function (err, updatedItem) {
+    if (err) { return next(err); }
+       // Successful - redirect to genre detail page.
+       res.redirect(updatedItem.url);
+    });
+
 }
 
 exports.item_list = function(req, res) {

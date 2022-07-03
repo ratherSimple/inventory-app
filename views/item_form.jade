@@ -3,6 +3,8 @@ extends layout
 block content 
   h2 Update #{item.name}:
   form(action=item.url+'/update' method="POST")
+    div
+      input(type='hidden',name='id', required='true', value=item._id )
     p
       label(for="name") Name: 
       input(id="name" name="name" value=item.name) 
@@ -26,3 +28,4 @@ block content
     p
       label(for="quantity") Quantity: 
       input(id="quantity" name="quantity" value=item.quantity type="number") 
+    button(type="submit") Update item
